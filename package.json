@@ -1,0 +1,20 @@
+{
+  "name": "govfinance-previdencia-sjbv",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/standalone.mjs",
+    "preview": "vite preview",
+    "dados": "python scripts/coletar_audesp.py"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.4.1",
+    "vite": "^6.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.1",
+    "lucide-react": "^0.468.0"
+  }
+}
