@@ -34,3 +34,15 @@ tfoot td{background:#f3f6f3;border-top:1px solid var(--line)}
 td.wrap{white-space:normal;min-width:260px;max-width:460px}
 .pill{white-space:nowrap}
 .table-note{margin-top:14px}
+
+.app{transition:grid-template-columns .2s}
+.sidebar-toggle{border:1px solid #1c3934;background:transparent;color:#8ea79f;border-radius:8px;padding:8px 12px;margin:0 3px 14px;display:flex;align-items:center;gap:10px;font-size:10px;cursor:pointer}
+.sidebar-toggle:hover{background:#12352f;color:white}
+.sidebar-toggle svg{width:16px;flex:none}
+.app.collapsed{grid-template-columns:72px 1fr}
+.app.collapsed .sidebar{padding:25px 10px}
+.app.collapsed .brand{padding:0 0 18px;justify-content:center}
+.app.collapsed .brand>div:last-child,.app.collapsed .municipality,.app.collapsed .nav-label,.app.collapsed .sidebar-toggle span,.app.collapsed .base-note span{display:none}
+.app.collapsed .sidebar-toggle,.app.collapsed .sidebar nav button{justify-content:center;padding:10px 0;margin-left:0;margin-right:0}
+.app.collapsed .base-note{justify-content:center;padding:18px 0 0}
+@media(max-width:760px){.sidebar-toggle{display:none}.app.collapsed .sidebar{padding:25px 17px}.app.collapsed .brand>div:last-child,.app.collapsed .municipality,.app.collapsed .base-note span{display:flex}.app.collapsed .nav-label{display:inline}.app.collapsed .sidebar nav button{justify-content:flex-start;padding:9px 12px}}

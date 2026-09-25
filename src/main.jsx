@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { AlertTriangle, CalendarRange, CheckCircle2, CircleDollarSign, Download, FileText, Gauge, Landmark, ListFilter, Menu, PiggyBank, RotateCcw, Search, ShieldCheck, TableProperties, TrendingDown, TrendingUp, Users, WalletCards, X } from "lucide-react";
+import { AlertTriangle, CalendarRange, CheckCircle2, CircleDollarSign, Download, FileText, Gauge, Landmark, ListFilter, Menu, PanelLeftClose, PanelLeftOpen, PiggyBank, RotateCcw, Search, ShieldCheck, TableProperties, TrendingDown, TrendingUp, Users, WalletCards, X } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import "./styles.css";
 import "./previdencia.css";
@@ -51,6 +51,9 @@ const opcoes = (rows,campo) => [...new Set(rows.map(r=>r[campo]).filter(Boolean)
 function App(){
   const [dados,setDados]=useState(null); const [erro,setErro]=useState("");
   const [tab,setTab]=useState("visao"); const [drawer,setDrawer]=useState(false);
+  // barra lateral recolhida (só ícones); a escolha fica salva neste navegador
+  const [recolhida,setRecolhida]=useState(()=>{try{return localStorage.getItem("ipsjbv-sidebar")==="recolhida"}catch{return false}});
+  const alternarBarra=()=>setRecolhida(v=>{const novo=!v; try{localStorage.setItem("ipsjbv-sidebar",novo?"recolhida":"aberta")}catch{} return novo;});
   const [anos,setAnos]=useState([]); const [meses,setMeses]=useState([]);
 
   // O index.html gerado no build já traz os dados embutidos, para abrir com dois cliques (file://),
@@ -72,10 +75,11 @@ function App(){
   if(!dados) return <div className="empty"><PiggyBank/><h2>Carregando dados do TCE-SP...</h2></div>;
   const filtros={dados,anos,setAnos,meses,setMeses,ultimoAno};
 
-  return <div className="app"><aside className={`sidebar ${drawer?"open":""}`}><button className="close" onClick={()=>setDrawer(false)}><X/></button>
+  return <div className={`app ${recolhida?"collapsed":""}`}><aside className={`sidebar ${drawer?"open":""}`}><button className="close" onClick={()=>setDrawer(false)}><X/></button>
     <div className="brand"><div className="brandmark"><Landmark/></div><div><strong>GovFinance</strong><span>Inteligência previdenciária</span></div></div>
+    <button className="sidebar-toggle" onClick={alternarBarra} title={recolhida?"Expandir menu":"Recolher menu"}>{recolhida?<PanelLeftOpen/>:<PanelLeftClose/>}<span>Recolher menu</span></button>
     <div className="municipality"><span>Instituto analisado</span><strong>IPSJBV · São João da Boa Vista</strong><small>SP · RPPS · {dados.anosDisp[0]}–{ultimoAno}</small></div>
-    <nav>{nav.map(([id,label,Icon])=><button key={id} className={tab===id?"active":""} onClick={()=>{setTab(id);setDrawer(false)}}><Icon/>{label}</button>)}</nav>
+    <nav>{nav.map(([id,label,Icon])=><button key={id} className={tab===id?"active":""} onClick={()=>{setTab(id);setDrawer(false)}} title={label}><Icon/><span className="nav-label">{label}</span></button>)}</nav>
     <div className="base-note"><CheckCircle2/><span><strong>{(dados.receitas.length+dados.despesas.length).toLocaleString("pt-BR")} lançamentos AUDESP</strong><small>Coletado em {new Date(dados.geradoEm).toLocaleDateString("pt-BR")}</small></span></div></aside>
     <main><header><button className="menu" onClick={()=>setDrawer(true)}><Menu/></button><div><p>GOVFINANCE · PREVIDÊNCIA DE SÃO JOÃO DA BOA VISTA/SP</p><h1>{title}</h1></div><div className="head-actions"><span><i/> Dados até {MESES[ultimoMes-1]?.toLowerCase()}/{ultimoAno}</span><button onClick={()=>window.print()}><Download/> Exportar</button></div></header>
     {tab==="visao"&&<Overview f={filtro} filtros={filtros} go={setTab}/>}
